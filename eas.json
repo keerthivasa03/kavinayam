@@ -13,21 +13,12 @@
     },
     "preview": {
       "distribution": "internal",
-      "node": "18",
-      "npm": {
-        "installCommand": "npm install"
-      },
       "android": {
         "buildType": "apk",
         "gradleCommand": ":app:assembleRelease"
       }
     },
-    "production": {
-      "node": "18",
-      "npm": {
-        "installCommand": "npm install"
-      }
-    }
+    "production": {}
   },
   "submit": {}
 }
