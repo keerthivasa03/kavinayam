@@ -1,9 +1,10 @@
 import React from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import {
+  Ionicons,
   Feather,
-  MaterialIcons,
   MaterialCommunityIcons,
+  MaterialIcons,
   SimpleLineIcons
 } from "@expo/vector-icons";
 
@@ -19,85 +20,52 @@ const BottomTabNavigator = () => {
     <Tab.Navigator
       screenOptions={({ route }) => ({
         headerShown: false,
-
-        // 🎨 Colors
-        tabBarActiveTintColor: "#8B0000",
+        tabBarActiveTintColor: "#8B0000", // dark red
         tabBarInactiveTintColor: "white",
-
-        // 🎨 Tab bar styling
         tabBarStyle: {
-          backgroundColor: "#000",
+          backgroundColor: "#000", // black
           borderTopWidth: 0,
           height: 60,
           paddingBottom: 5,
         },
-
         tabBarLabelStyle: {
           fontSize: 12,
           marginBottom: 5,
         },
-
-        // 🔥 ICON LOGIC (FIXED)
         tabBarIcon: ({ color, size }) => {
-          switch (route.name) {
-            case "Home":
-              return <Feather name="home" size={size} color={color} />;
-
-            case "Kavithai List":
-              return (
-                <SimpleLineIcons
-                  name="playlist"
-                  size={size}
-                  color={color}
-                />
-              );
-
-            case "Recordings List":
-              return (
-                <MaterialIcons
-                  name="audiotrack" // ✅ FIXED ICON
-                  size={size}
-                  color={color}
-                />
-              );
-
-            case "Logout":
-              return (
-                <MaterialCommunityIcons
-                  name="logout" // ✅ FIXED ICON
-                  size={size}
-                  color={color}
-                />
-              );
-
-            default:
-              return null;
+          if (route.name === "Home") {
+            return <Feather name="home" size={size} color={color} />;
+          } else if (route.name === "Kavithai List") {
+            return (
+              <SimpleLineIcons name="playlist" size={size} color={color} />
+            );
+          } else if (route.name === "Recordings List") {
+            return (
+              <MaterialIcons name="audio-file" size={size} color={color} />
+            );
+          } else if (route.name === "Logout") {
+            return (
+              <MaterialIcons name="logout" size={size} color={color} />
+            );
           }
         },
       })}
     >
-      {/* 🏠 Home */}
       <Tab.Screen
         name="Home"
         component={HomeScreen}
         options={{ tabBarLabel: "Home" }}
       />
-
-      {/* 📜 Kavithai */}
       <Tab.Screen
         name="Kavithai List"
         component={KavithaiList}
         options={{ tabBarLabel: "Kavithai" }}
       />
-
-      {/* 🎙 Recordings */}
       <Tab.Screen
         name="Recordings List"
         component={RecordingsList}
         options={{ tabBarLabel: "Recordings" }}
       />
-
-      {/* 🚪 Logout */}
       <Tab.Screen
         name="Logout"
         component={Logout}

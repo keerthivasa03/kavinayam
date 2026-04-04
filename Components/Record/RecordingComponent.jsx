@@ -13,7 +13,7 @@ import * as FileSystem from "expo-file-system/legacy";
 import tw from "tailwind-react-native-classnames";
 import { supabase } from "../../lib/supabase";
 import PropTypes from "prop-types";
-
+import { decode as atob } from "base-64";
 const RecordingComponent = ({ lyrics = [], flatListRef, onClose, name }) => {
   const [recording, setRecording] = useState(null);
   const [isRecording, setIsRecording] = useState(false);
@@ -123,29 +123,30 @@ const RecordingComponent = ({ lyrics = [], flatListRef, onClose, name }) => {
 
   // ☁️ UPLOAD
   const uploadRecording = async (fileUri) => {
-    const { data: { user } } = await supabase.auth.getUser();
+  const { data: { user } } = await supabase.auth.getUser();
 
-    const base64 = await FileSystem.readAsStringAsync(fileUri, {
-      encoding: "base64",
+  // ✅ FIXED HERE
+  const base64 = await FileSystem.readAsStringAsync(fileUri, {
+    encoding: FileSystem.EncodingType.Base64,
+  });
+
+  const arrayBuffer = Uint8Array.from(atob(base64), c => c.charCodeAt(0));
+
+  const fileName = `${Date.now()}.m4a`;
+  const filePath = `${user.id}/${fileName}`;
+
+  await supabase.storage
+    .from("recordings")
+    .upload(filePath, arrayBuffer, {
+      contentType: "audio/m4a",
     });
 
-    const arrayBuffer = Uint8Array.from(atob(base64), c => c.charCodeAt(0));
+  const publicUrl = supabase.storage
+    .from("recordings")
+    .getPublicUrl(filePath).data.publicUrl;
 
-    const fileName = `${Date.now()}.m4a`;
-    const filePath = `${user.id}/${fileName}`;
-
-    await supabase.storage
-      .from("recordings")
-      .upload(filePath, arrayBuffer, {
-        contentType: "audio/m4a",
-      });
-
-    const publicUrl = supabase.storage
-      .from("recordings")
-      .getPublicUrl(filePath).data.publicUrl;
-
-    return { publicUrl, fileName };
-  };
+  return { publicUrl, fileName };
+};
 
   // 💾 SAVE
   const saveRecording = async () => {

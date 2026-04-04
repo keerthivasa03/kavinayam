@@ -5,15 +5,6 @@ import { useState, useEffect } from "react";
 import { ActivityIndicator, View } from "react-native";
 import tw from "tailwind-react-native-classnames";
 
-// ✅ ADD THIS
-import { useFonts } from "expo-font";
-import {
-  Feather,
-  MaterialIcons,
-  MaterialCommunityIcons,
-  SimpleLineIcons,
-} from "@expo/vector-icons";
-
 // Screens
 import LoginScreen from "../Login/LoginScreen.jsx";
 import BottomTabNavigator from "../Tab Bar/BottomTabNavigator.js";
@@ -30,7 +21,7 @@ import ForgotPasswordScreen from "../Reset Password/ForgotPasswordScreen.js";
 
 const Stack = createNativeStackNavigator();
 
-// Linking
+// ✅ FIXED linking
 const linking = {
   prefixes: ["kavinayam://"],
   config: {
@@ -43,14 +34,6 @@ const linking = {
 export default function AppNavigator() {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
-
-  // ✅ LOAD ICON FONTS HERE
-  const [fontsLoaded] = useFonts({
-    ...Feather.font,
-    ...MaterialIcons.font,
-    ...MaterialCommunityIcons.font,
-    ...SimpleLineIcons.font,
-  });
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
@@ -67,8 +50,7 @@ export default function AppNavigator() {
     return () => subscription.unsubscribe();
   }, []);
 
-  // ⛔ WAIT until BOTH ready
-  if (loading || !fontsLoaded) {
+  if (loading) {
     return (
       <View style={tw`flex-1 justify-center items-center bg-gray-900`}>
         <ActivityIndicator size="large" color="white" />
@@ -79,11 +61,14 @@ export default function AppNavigator() {
   return (
     <NavigationContainer linking={linking}>
       <Stack.Navigator screenOptions={{ headerShown: false }}>
+        
         {user ? (
           <>
             <Stack.Screen name="HomeTabs" component={BottomTabNavigator} />
             <Stack.Screen name="KavithaiDetails" component={KavithaiDetails} />
             <Stack.Screen name="KavithaiList" component={KavithaiList} />
+
+            {/* ✅ FIXED NAME */}
             <Stack.Screen name="ResetPassword" component={ResetPasswordScreen} />
 
             <Stack.Screen name="ThoniKaraoke" component={ThoniKaraoke} />
@@ -100,6 +85,7 @@ export default function AppNavigator() {
             <Stack.Screen name="ResetPassword" component={ResetPasswordScreen} />
           </>
         )}
+
       </Stack.Navigator>
     </NavigationContainer>
   );
