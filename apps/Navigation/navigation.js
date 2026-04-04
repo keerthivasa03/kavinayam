@@ -13,7 +13,6 @@ import ThoniKaraoke from "../Karaoke Display/ThoniKaroki.jsx";
 import VegamKaroki from "../Karaoke Display/VegamKaroki.jsx";
 import Nayamkaraoke from "../Karaoke Display/Nayamkaraoke.jsx";
 import KavithaiList from "../Kavithai List/KavithaiList.jsx";
-import PronunciationKaroki from "../Karaoke Display/VegamKaroki.jsx";
 import UhchayaripuKaraoke from "../Karaoke Display/UhchayaripuKaraoke.jsx";
 import Allkaraoke from "../Karaoke Display/Allkaraoke.jsx";
 import ResetPasswordScreen from "../Login/ResetPasswordScreen.js";
@@ -74,7 +73,6 @@ export default function AppNavigator() {
             <Stack.Screen name="ThoniKaraoke" component={ThoniKaraoke} />
             <Stack.Screen name="VegamKaroki" component={VegamKaroki} />
             <Stack.Screen name="Allkaraoke" component={Allkaraoke} />
-            <Stack.Screen name="PronunciationKaroki" component={PronunciationKaroki} />
             <Stack.Screen name="UhchayaripuKaraoke" component={UhchayaripuKaraoke} />
             <Stack.Screen name="Nayamkaraoke" component={Nayamkaraoke} />
           </>

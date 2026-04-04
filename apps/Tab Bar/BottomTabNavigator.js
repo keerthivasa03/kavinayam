@@ -12,10 +12,19 @@ import HomeScreen from "../Home/HomeScreen";
 import KavithaiList from "../Kavithai List/KavithaiList";
 import RecordingsList from "../RecordingsList/RecordingsList";
 import Logout from "../Logout/Logout";
-
+import { useEffect } from "react";
+import * as Font from "expo-font";
 const Tab = createBottomTabNavigator();
 
 const BottomTabNavigator = () => {
+  useEffect(() => {
+    Font.loadAsync({
+      ...Feather.font,
+      ...MaterialIcons.font,
+      ...SimpleLineIcons.font,
+      ...Ionicons.font,
+    });
+  }, []);
   return (
     <Tab.Navigator
       screenOptions={({ route }) => ({
