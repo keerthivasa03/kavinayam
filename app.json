@@ -8,6 +8,7 @@
     "userInterfaceStyle": "light",
     "newArchEnabled": true,
     "scheme": "kavinayam",
+     "assetBundlePatterns": ["**/*"],
     "splash": {
       "image": "./assets/logo.png",
       "resizeMode": "contain",

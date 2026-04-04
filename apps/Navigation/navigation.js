@@ -1,9 +1,8 @@
+import React, { useState, useEffect } from "react";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { NavigationContainer } from "@react-navigation/native";
-import { supabase } from "../../lib/supabase";
-import { useState, useEffect } from "react";
 import { ActivityIndicator, View } from "react-native";
-import tw from "tailwind-react-native-classnames";
+import { supabase } from "../../lib/supabase";
 
 // Screens
 import LoginScreen from "../Login/LoginScreen.jsx";
@@ -20,7 +19,6 @@ import ForgotPasswordScreen from "../Reset Password/ForgotPasswordScreen.js";
 
 const Stack = createNativeStackNavigator();
 
-// ✅ FIXED linking
 const linking = {
   prefixes: ["kavinayam://"],
   config: {
@@ -35,23 +33,31 @@ export default function AppNavigator() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    supabase.auth.getSession().then(({ data: { session } }) => {
+    supabase.auth.getSession().then((res) => {
+      const session = res?.data?.session;
       setUser(session?.user ?? null);
       setLoading(false);
     });
 
-    const {
-      data: { subscription },
-    } = supabase.auth.onAuthStateChange((event, session) => {
+    const { data } = supabase.auth.onAuthStateChange((event, session) => {
       setUser(session?.user ?? null);
     });
 
-    return () => subscription.unsubscribe();
+    return () => {
+      if (data?.subscription) data.subscription.unsubscribe();
+    };
   }, []);
 
   if (loading) {
     return (
-      <View style={tw`flex-1 justify-center items-center bg-gray-900`}>
+      <View
+        style={{
+          flex: 1,
+          justifyContent: "center",
+          alignItems: "center",
+          backgroundColor: "#111",
+        }}
+      >
         <ActivityIndicator size="large" color="white" />
       </View>
     );
@@ -60,14 +66,11 @@ export default function AppNavigator() {
   return (
     <NavigationContainer linking={linking}>
       <Stack.Navigator screenOptions={{ headerShown: false }}>
-        
         {user ? (
           <>
             <Stack.Screen name="HomeTabs" component={BottomTabNavigator} />
             <Stack.Screen name="KavithaiDetails" component={KavithaiDetails} />
             <Stack.Screen name="KavithaiList" component={KavithaiList} />
-
-            {/* ✅ FIXED NAME */}
             <Stack.Screen name="ResetPassword" component={ResetPasswordScreen} />
 
             <Stack.Screen name="ThoniKaraoke" component={ThoniKaraoke} />
@@ -83,7 +86,6 @@ export default function AppNavigator() {
             <Stack.Screen name="ResetPassword" component={ResetPasswordScreen} />
           </>
         )}
-
       </Stack.Navigator>
     </NavigationContainer>
   );
