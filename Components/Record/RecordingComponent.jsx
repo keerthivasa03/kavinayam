@@ -5,15 +5,17 @@ import {
   TouchableOpacity,
   FlatList,
   Animated,
-  Alert,
+  ActivityIndicator,
+  Image,
 } from "react-native";
-import { Ionicons, Entypo, MaterialIcons } from "@expo/vector-icons";
+
 import { Audio } from "expo-av";
 import * as FileSystem from "expo-file-system/legacy";
 import tw from "tailwind-react-native-classnames";
 import { supabase } from "../../lib/supabase";
 import PropTypes from "prop-types";
 import { decode as atob } from "base-64";
+
 const RecordingComponent = ({ lyrics = [], flatListRef, onClose, name }) => {
   const [recording, setRecording] = useState(null);
   const [isRecording, setIsRecording] = useState(false);
@@ -24,12 +26,13 @@ const RecordingComponent = ({ lyrics = [], flatListRef, onClose, name }) => {
   const [tempRecordingUri, setTempRecordingUri] = useState(null);
 
   const soundRef = useRef(null);
-  const pulseAnim = useRef(new Animated.Value(0)).current;
 
   // 🔹 Load recordings
   useEffect(() => {
     const init = async () => {
-      const { data: { user } } = await supabase.auth.getUser();
+      const { data } = await supabase.auth.getUser();
+      const user = data?.user;
+
       if (user) loadUserRecordings(user.id);
     };
     init();
@@ -82,7 +85,7 @@ const RecordingComponent = ({ lyrics = [], flatListRef, onClose, name }) => {
     }
   };
 
-  // 🔥 PLAY / PAUSE (MAIN FIX)
+  // ▶️ PLAY / PAUSE
   const togglePlayPause = async (uri, id) => {
     try {
       if (currentlyPlayingId === id && isPlaying) {
@@ -123,30 +126,32 @@ const RecordingComponent = ({ lyrics = [], flatListRef, onClose, name }) => {
 
   // ☁️ UPLOAD
   const uploadRecording = async (fileUri) => {
-  const { data: { user } } = await supabase.auth.getUser();
+    const { data } = await supabase.auth.getUser();
+    const user = data?.user;
 
-  // ✅ FIXED HERE
-  const base64 = await FileSystem.readAsStringAsync(fileUri, {
-    encoding: FileSystem.EncodingType.Base64,
-  });
-
-  const arrayBuffer = Uint8Array.from(atob(base64), c => c.charCodeAt(0));
-
-  const fileName = `${Date.now()}.m4a`;
-  const filePath = `${user.id}/${fileName}`;
-
-  await supabase.storage
-    .from("recordings")
-    .upload(filePath, arrayBuffer, {
-      contentType: "audio/m4a",
+    const base64 = await FileSystem.readAsStringAsync(fileUri, {
+      encoding: FileSystem.EncodingType.Base64,
     });
 
-  const publicUrl = supabase.storage
-    .from("recordings")
-    .getPublicUrl(filePath).data.publicUrl;
+    const arrayBuffer = Uint8Array.from(atob(base64), (c) =>
+      c.charCodeAt(0)
+    );
 
-  return { publicUrl, fileName };
-};
+    const fileName = `${Date.now()}.m4a`;
+    const filePath = `${user.id}/${fileName}`;
+
+    await supabase.storage
+      .from("recordings")
+      .upload(filePath, arrayBuffer, {
+        contentType: "audio/m4a",
+      });
+
+    const publicUrl = supabase.storage
+      .from("recordings")
+      .getPublicUrl(filePath).data.publicUrl;
+
+    return { publicUrl, fileName };
+  };
 
   // 💾 SAVE
   const saveRecording = async () => {
@@ -163,7 +168,8 @@ const RecordingComponent = ({ lyrics = [], flatListRef, onClose, name }) => {
 
   // ❌ DELETE
   const deleteRecording = async (fileName) => {
-    const { data: { user } } = await supabase.auth.getUser();
+    const { data } = await supabase.auth.getUser();
+    const user = data?.user;
 
     await supabase.storage
       .from("recordings")
@@ -189,48 +195,60 @@ const RecordingComponent = ({ lyrics = [], flatListRef, onClose, name }) => {
         {isRecording ? "Recording..." : "Ready"}
       </Text>
 
-      {/* RECORD BUTTON */}
+      {/* 🎤 RECORD BUTTON */}
       <TouchableOpacity
         onPress={isRecording ? stopRecording : startRecording}
         style={tw`bg-blue-500 p-4 rounded-full self-center mb-4`}
       >
-        <Ionicons
-          name={isRecording ? "stop" : "mic"}
-          size={30}
-          color="white"
+        <Image
+          source={
+            isRecording
+              ? require("../../assets/icon image/pause.png")
+              : require("../../assets/icon image/mic.png")
+          }
+          style={{ width: 30, height: 30, tintColor: "white" }}
         />
       </TouchableOpacity>
 
-      {/* SAVE + PLAY TEMP */}
+      {/* SAVE + PLAY */}
       {showSaveButton && (
         <View style={tw`flex-row justify-center mb-4`}>
+          
+          {/* SAVE */}
           <TouchableOpacity
             onPress={saveRecording}
             style={tw`bg-green-500 p-3 rounded-full mx-2`}
           >
-            <MaterialIcons name="save" size={24} color="white" />
+            <Image
+              source={require("../../assets/icon image/download.png")}
+              style={{ width: 24, height: 24, tintColor: "white" }}
+            />
           </TouchableOpacity>
 
+          {/* PLAY / PAUSE */}
           <TouchableOpacity
             onPress={() => togglePlayPause(tempRecordingUri, "temp")}
             style={tw`bg-blue-500 p-3 rounded-full mx-2`}
           >
-            <Entypo
-              name={
+            <Image
+              source={
                 currentlyPlayingId === "temp" && isPlaying
-                  ? "controller-paus"
-                  : "controller-play"
+                  ? require("../../assets/icon image/pause.png")
+                  : require("../../assets/icon image/play.png")
               }
-              size={20}
-              color="white"
+              style={{ width: 20, height: 20, tintColor: "white" }}
             />
           </TouchableOpacity>
 
+          {/* DELETE */}
           <TouchableOpacity
             onPress={() => setShowSaveButton(false)}
             style={tw`bg-red-500 p-3 rounded-full mx-2`}
           >
-            <MaterialIcons name="delete" size={24} color="white" />
+            <Image
+              source={require("../../assets/icon image/delete.png")}
+              style={{ width: 20, height: 20, tintColor: "white" }}
+            />
           </TouchableOpacity>
         </View>
       )}
@@ -244,26 +262,31 @@ const RecordingComponent = ({ lyrics = [], flatListRef, onClose, name }) => {
             <Text style={tw`text-white`}>{item.name}</Text>
 
             <View style={tw`flex-row`}>
+              
+              {/* PLAY */}
               <TouchableOpacity
                 onPress={() => togglePlayPause(item.uri, item.id)}
                 style={tw`bg-blue-500 p-2 mr-2`}
               >
-                <Entypo
-                  name={
+                <Image
+                  source={
                     currentlyPlayingId === item.id && isPlaying
-                      ? "controller-paus"
-                      : "controller-play"
+                      ? require("../../assets/icon image/pause.png")
+                      : require("../../assets/icon image/play.png")
                   }
-                  size={16}
-                  color="white"
+                  style={{ width: 16, height: 16, tintColor: "white" }}
                 />
               </TouchableOpacity>
 
+              {/* DELETE */}
               <TouchableOpacity
                 onPress={() => deleteRecording(item.name)}
                 style={tw`bg-red-500 p-2`}
               >
-                <Ionicons name="trash" size={16} color="white" />
+                <Image
+                  source={require("../../assets/icon image/delete.png")}
+                  style={{ width: 16, height: 16, tintColor: "white" }}
+                />
               </TouchableOpacity>
             </View>
           </View>

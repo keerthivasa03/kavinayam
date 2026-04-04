@@ -8,6 +8,7 @@ import {
   Dimensions,
   ActivityIndicator,
 } from "react-native";
+import { Image } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import {
   Ionicons,
@@ -320,43 +321,49 @@ const ThoniKaraoke = () => {
             </View>
           </View>
 
-          <View style={tw`flex-row items-center justify-center`}>
-            <TouchableOpacity
-              style={tw`bg-white p-4 rounded-full shadow-md`}
-              onPress={loadAndPlayAudio}
-              disabled={isLoading}
-            >
-              {isLoading ? (
-                <ActivityIndicator size="small" color="#000" />
-              ) : (
-                <Ionicons
-                  name={isPlaying ? "pause" : "play"}
-                  size={28}
-                  color="#000"
-                />
-              )}
-            </TouchableOpacity>
+          <View style={tw`flex-row justify-center mt-4`}>
+  
+  {/* PLAY / PAUSE */}
+  <TouchableOpacity
+    style={tw`bg-white p-3 rounded-full`}
+    onPress={loadAndPlayAudio}
+  >
+    <Image
+      source={
+        isPlaying
+          ? require("../../assets/icon image/pause.png")
+          : require("../../assets/icon image/play.png")
+      }
+      style={{ width: 28, height: 28 }}
+      resizeMode="contain"
+    />
+  </TouchableOpacity>
 
-            <TouchableOpacity
-              onPress={handleStartRecording}
-              style={tw`bg-white p-3 rounded-full shadow-md ml-6`}
-            >
-              <Entypo name="mic" size={24} color="black" />
-            </TouchableOpacity>
+  {/* MIC */}
+  <TouchableOpacity
+    onPress={() => setShowRecordingUI(true)}
+    style={tw`bg-white p-3 rounded-full ml-6`}
+  >
+    <Image
+      source={require("../../assets/icon image/mic.png")}
+      style={{ width: 24, height: 24 }}
+      resizeMode="contain"
+    />
+  </TouchableOpacity>
 
-            <TouchableOpacity
-              style={tw`bg-white p-3 rounded-full shadow-md ml-6`}
-              disabled={isLoading}
-              onPress={() => setShowMessage(!showMessage)}
-            >
-              
-              <MaterialCommunityIcons
-                name="message-text"
-                size={24}
-                color={isLoading ? "#999" : "black"}
-              />
-            </TouchableOpacity>
-          </View>
+  {/* MESSAGE */}
+  <TouchableOpacity
+    style={tw`bg-white p-3 rounded-full ml-6`}
+    onPress={() => setShowMessage(!showMessage)}
+  >
+    <Image
+      source={require("../../assets/icon image/message.png")}
+      style={{ width: 24, height: 24 }}
+      resizeMode="contain"
+    />
+  </TouchableOpacity>
+
+</View>
         </>
       )}
     </SafeAreaView>

@@ -12,6 +12,7 @@ import {
   Dimensions,
   ActivityIndicator,
 } from "react-native";
+import { Image } from "react-native";
 import {
   Ionicons,
   AntDesign,
@@ -275,35 +276,48 @@ const Allkaraoke = () => {
       )}
       {/* 🎮 CONTROLS */}
       <View style={tw`flex-row justify-center mt-4`}>
-        <TouchableOpacity
-          style={tw`bg-white p-3 rounded-full`}
-          onPress={loadAndPlayMedia}
-        >
-          <Ionicons
-            name={isPlaying ? "pause" : "play"}
-            size={28}
-            color="black"
-          />
-        </TouchableOpacity>
+  
+  {/* PLAY / PAUSE */}
+  <TouchableOpacity
+    style={tw`bg-white p-3 rounded-full`}
+    onPress={loadAndPlayMedia}
+  >
+    <Image
+      source={
+        isPlaying
+          ? require("../../assets/icon image/pause.png")
+          : require("../../assets/icon image/play.png")
+      }
+      style={{ width: 28, height: 28 }}
+      resizeMode="contain"
+    />
+  </TouchableOpacity>
 
-        <TouchableOpacity
-          onPress={() => setShowRecordingUI(true)}
-          style={tw`bg-white p-3 rounded-full ml-6`}
-        >
-          <Entypo name="mic" size={24} color="black" />
-        </TouchableOpacity>
+  {/* MIC */}
+  <TouchableOpacity
+    onPress={() => setShowRecordingUI(true)}
+    style={tw`bg-white p-3 rounded-full ml-6`}
+  >
+    <Image
+      source={require("../../assets/icon image/mic.png")}
+      style={{ width: 24, height: 24 }}
+      resizeMode="contain"
+    />
+  </TouchableOpacity>
 
-        <TouchableOpacity
-          style={tw`bg-white p-3 rounded-full ml-6`}
-          onPress={() => setShowMessage(!showMessage)}
-        >
-          <MaterialCommunityIcons
-            name="message-text"
-            size={24}
-            color="black"
-          />
-        </TouchableOpacity>
-      </View>
+  {/* MESSAGE */}
+  <TouchableOpacity
+    style={tw`bg-white p-3 rounded-full ml-6`}
+    onPress={() => setShowMessage(!showMessage)}
+  >
+    <Image
+      source={require("../../assets/icon image/message.png")}
+      style={{ width: 24, height: 24 }}
+      resizeMode="contain"
+    />
+  </TouchableOpacity>
+
+</View>
     </SafeAreaView>
   );
 };

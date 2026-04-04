@@ -1,13 +1,6 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import * as Font from "expo-font";
-
-import {
-  Ionicons,
-  Feather,
-  MaterialIcons,
-  SimpleLineIcons,
-} from "@expo/vector-icons";
+import { Image } from "react-native";
 
 import HomeScreen from "../Home/HomeScreen";
 import KavithaiList from "../Kavithai List/KavithaiList";
@@ -17,15 +10,6 @@ import Logout from "../Logout/Logout";
 const Tab = createBottomTabNavigator();
 
 const BottomTabNavigator = () => {
-  useEffect(() => {
-    Font.loadAsync({
-      ...Ionicons.font,
-      ...Feather.font,
-      ...MaterialIcons.font,
-      ...SimpleLineIcons.font,
-    });
-  }, []);
-
   return (
     <Tab.Navigator
       screenOptions={({ route }) => ({
@@ -42,16 +26,32 @@ const BottomTabNavigator = () => {
           fontSize: 12,
           marginBottom: 5,
         },
-        tabBarIcon: ({ color, size }) => {
+
+        // 🔥 PNG ICONS HERE
+        tabBarIcon: ({ focused }) => {
+          let icon;
+
           if (route.name === "Home") {
-            return <Feather name="home" size={size} color={color} />;
+            icon = require("../../assets/icon image/home.png");
           } else if (route.name === "Kavithai List") {
-            return <SimpleLineIcons name="playlist" size={size} color={color} />;
+            icon = require("../../assets/icon image/playlist.png");
           } else if (route.name === "Recordings List") {
-            return <MaterialIcons name="audio-file" size={size} color={color} />;
+            icon = require("../../assets/icon image/music.png");
           } else if (route.name === "Logout") {
-            return <MaterialIcons name="logout" size={size} color={color} />;
+            icon = require("../../assets/icon image/logout.png");
           }
+
+          return (
+            <Image
+              source={icon}
+              style={{
+                width: 24,
+                height: 24,
+                tintColor: focused ? "#8B0000" : "white",
+              }}
+              resizeMode="contain"
+            />
+          );
         },
       })}
     >

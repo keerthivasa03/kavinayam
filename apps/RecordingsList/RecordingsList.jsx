@@ -11,6 +11,7 @@ import {
   RefreshControl,
 
 } from "react-native";
+import { Image } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Audio } from "expo-av";
 import { Directory, Paths } from "expo-file-system";
@@ -227,49 +228,57 @@ const RecordingsList = () => {
                 </View>
 
                 <View style={styles.actions}>
-                  {/* Download */}
-                  <TouchableOpacity
-                    style={styles.downloadBtn}
-                    onPress={() =>
-                      handleDownload(item.url, item.name)
-                    }
-                  >
-                    {downloading === item.name ? (
-                      <ActivityIndicator color="#fff" size="small" />
-                    ) : (
-                      <Feather name="download" size={16} color="#fff" />
-                    )}
-                  </TouchableOpacity>
+  
+  {/* Download */}
+  <TouchableOpacity
+    style={styles.downloadBtn}
+    onPress={() => handleDownload(item.url, item.name)}
+  >
+    {downloading === item.name ? (
+      <ActivityIndicator color="#fff" size="small" />
+    ) : (
+      <Image
+        source={require("../../assets/icon image/download.png")}
+        style={{ width: 16, height: 16, tintColor: "#fff" }}
+        resizeMode="contain"
+      />
+    )}
+  </TouchableOpacity>
 
-                  {/* Play */}
-                  <TouchableOpacity
-                    style={[
-                      styles.playBtn,
-                      currentlyPlaying === item.name && isPlaying
-                        ? styles.playing
-                        : null,
-                    ]}
-                    onPress={() =>
-                      playAudio(item.url, item.name)
-                    }
-                  >
-                    {currentlyPlaying === item.name && isPlaying ? (
-                      <MaterialIcons name="pause" size={18} color="#fff" />
-                    ) : (
-                      <Entypo name="controller-play" size={18} color="#fff" />
-                    )}
-                  </TouchableOpacity>
+  {/* Play / Pause */}
+  <TouchableOpacity
+    style={[
+      styles.playBtn,
+      currentlyPlaying === item.name && isPlaying
+        ? styles.playing
+        : null,
+    ]}
+    onPress={() => playAudio(item.url, item.name)}
+  >
+    <Image
+      source={
+        currentlyPlaying === item.name && isPlaying
+          ? require("../../assets/icon image/pause.png")
+          : require("../../assets/icon image/play.png")
+      }
+      style={{ width: 18, height: 18, tintColor: "#fff" }}
+      resizeMode="contain"
+    />
+  </TouchableOpacity>
 
-                  {/* Delete */}
-                  <TouchableOpacity
-                    style={styles.deleteBtn}
-                    onPress={() =>
-                      deleteRecording(item.fullPath, item.name)
-                    }
-                  >
-                    <Ionicons name="trash-outline" size={16} color="#fff" />
-                  </TouchableOpacity>
-                </View>
+  {/* Delete */}
+  <TouchableOpacity
+    style={styles.deleteBtn}
+    onPress={() => deleteRecording(item.fullPath, item.name)}
+  >
+    <Image
+      source={require("../../assets/icon image/delete.png")} // OR delete.png
+      style={{ width: 16, height: 16, tintColor: "#fff" }}
+      resizeMode="contain"
+    />
+  </TouchableOpacity>
+
+</View>
               </View>
             )}
           />
