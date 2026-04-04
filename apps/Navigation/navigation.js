@@ -4,7 +4,6 @@ import { supabase } from "../../lib/supabase";
 import { useState, useEffect } from "react";
 import { ActivityIndicator, View } from "react-native";
 import tw from "tailwind-react-native-classnames";
-import * as Linking from "expo-linking";
 
 // Screens
 import LoginScreen from "../Login/LoginScreen.jsx";
@@ -18,15 +17,16 @@ import PronunciationKaroki from "../Karaoke Display/VegamKaroki.jsx";
 import UhchayaripuKaraoke from "../Karaoke Display/UhchayaripuKaraoke.jsx";
 import Allkaraoke from "../Karaoke Display/Allkaraoke.jsx";
 import ResetPasswordScreen from "../Login/ResetPasswordScreen.js";
+import ForgotPasswordScreen from "../Reset Password/ForgotPasswordScreen.js";
 
 const Stack = createNativeStackNavigator();
 
-// Deep linking config
+// ✅ FIXED linking
 const linking = {
   prefixes: ["kavinayam://"],
   config: {
     screens: {
-      ResetPasswordScreen: "ResetPasswordScreen",
+      ResetPassword: "reset-password",
     },
   },
 };
@@ -61,31 +61,31 @@ export default function AppNavigator() {
   return (
     <NavigationContainer linking={linking}>
       <Stack.Navigator screenOptions={{ headerShown: false }}>
+        
         {user ? (
           <>
             <Stack.Screen name="HomeTabs" component={BottomTabNavigator} />
             <Stack.Screen name="KavithaiDetails" component={KavithaiDetails} />
             <Stack.Screen name="KavithaiList" component={KavithaiList} />
-            <Stack.Screen
-              name="ResetPasswordScreen"
-              component={ResetPasswordScreen}
-            />
+
+            {/* ✅ FIXED NAME */}
+            <Stack.Screen name="ResetPassword" component={ResetPasswordScreen} />
+
             <Stack.Screen name="ThoniKaraoke" component={ThoniKaraoke} />
             <Stack.Screen name="VegamKaroki" component={VegamKaroki} />
             <Stack.Screen name="Allkaraoke" component={Allkaraoke} />
-            <Stack.Screen
-              name="PronunciationKaroki"
-              component={PronunciationKaroki}
-            />
-            <Stack.Screen
-              name="UhchayaripuKaraoke"
-              component={UhchayaripuKaraoke}
-            />
+            <Stack.Screen name="PronunciationKaroki" component={PronunciationKaroki} />
+            <Stack.Screen name="UhchayaripuKaraoke" component={UhchayaripuKaraoke} />
             <Stack.Screen name="Nayamkaraoke" component={Nayamkaraoke} />
           </>
         ) : (
-          <Stack.Screen name="Login" component={LoginScreen} />
+          <>
+            <Stack.Screen name="Login" component={LoginScreen} />
+            <Stack.Screen name="ForgotPassword" component={ForgotPasswordScreen} />
+            <Stack.Screen name="ResetPassword" component={ResetPasswordScreen} />
+          </>
         )}
+
       </Stack.Navigator>
     </NavigationContainer>
   );

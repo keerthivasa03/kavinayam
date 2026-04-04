@@ -4,10 +4,11 @@ import {
   Image,
   FlatList,
   Dimensions,
-  SafeAreaView,
+  
   StatusBar,
   useColorScheme,
 } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 import React from "react";
 import tw from "tailwind-react-native-classnames";
 import Thirukkural from "../../Components/Home/Thirukkural";

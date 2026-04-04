@@ -207,7 +207,29 @@ const Nayamkaraoke = () => {
         thumbTintColor="#FF0000"
         onSlidingComplete={handleSeek}
       />
+{showMessage && (
+        <View style={tw`absolute inset-0 z-50 justify-center items-center`}>
+          {/* Semi-transparent overlay */}
+          <View style={tw`absolute inset-0 bg-black opacity-70`} />
 
+          {/* Message box */}
+          <View
+            style={tw`bg-black bg-opacity-80 rounded-2xl w-4/5 p-6 border border-gray-600`}
+          >
+            <Text style={tw`text-white text-center text-lg font-bold mb-4`}>
+              விளக்கம்
+            </Text>
+            <Text style={tw`text-white text-center text-lg`}>
+நயம் என்பது சொற்களை இனிமையாகவும் மென்மையாகவும் உச்சரிக்கும் திறன் ஆகும். குரல் மிதமான சுருதியில் இருந்து, ஒவ்வொரு சொல்லையும் தெளிவாகச் சொல்ல வேண்டும். சரியான இடைவெளியுடன் பேசுவதும், உணர்ச்சியுடன் சொற்களை வெளிப்படுத்துவதும் முக்கியம்.            </Text>
+            <TouchableOpacity
+              onPress={() => setShowMessage(false)}
+              style={tw`mt-6 bg-white py-2 rounded-full`}
+            >
+              <Text style={tw`text-black text-center font-semibold`}>OK</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      )}
       {/* 🎮 CONTROLS */}
       <View style={tw`flex-row justify-center mt-4`}>
         <TouchableOpacity

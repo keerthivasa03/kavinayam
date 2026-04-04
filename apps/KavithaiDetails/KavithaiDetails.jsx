@@ -5,9 +5,9 @@ import {
   Image,
   TouchableOpacity,
   FlatList,
-  SafeAreaView,
   StyleSheet,
 } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { AntDesign } from "@expo/vector-icons";
 import tw from "tailwind-react-native-classnames";

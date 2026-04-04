@@ -111,9 +111,11 @@ const SignIn = ({ setScreen, email, setEmail, password, setPassword }) => {
         )}
       </TouchableOpacity>
 
-      <TouchableOpacity onPress={handlePasswordReset} style={tw`mb-4`}>
-        <Text style={tw`text-gray-500 text-center`}>Forgot password?</Text>
-      </TouchableOpacity>
+      <TouchableOpacity onPress={() => navigation.navigate("ForgotPassword")}>
+  <Text style={{ color: "blue", textAlign: "center" }}>
+    Forgot Password?
+  </Text>
+</TouchableOpacity>
 
       <TouchableOpacity onPress={() => setScreen(1)}>
         <Text style={tw`text-gray-500 text-center`}>

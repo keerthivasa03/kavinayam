@@ -4,17 +4,18 @@ import {
   Text,
   TouchableOpacity,
   FlatList,
-  SafeAreaView,
+
   Dimensions,
   ActivityIndicator,
 } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 import {
   Ionicons,
   FontAwesome5,
   Entypo,
   MaterialCommunityIcons,
 } from "@expo/vector-icons";
-import { Audio } from "expo-av";
+import { Audio } from "expo-audio";
 import tw from "tailwind-react-native-classnames";
 import Slider from "@react-native-community/slider";
 import { useNavigation, useRoute } from "@react-navigation/native";
@@ -234,7 +235,7 @@ const ThoniKaraoke = () => {
             style={tw`bg-black bg-opacity-80 rounded-2xl w-4/5 p-6 border border-gray-600`}
           >
             <Text style={tw`text-white text-center text-lg font-bold mb-4`}>
-              விளக்கம
+              விளக்கம்
             </Text>
             <Text style={tw`text-white text-center text-lg`}>
               ஒரு கவிதையை எழுதிய கவிஞரின் மனப்பாங்கு, உணர்வு அல்லது மனநிலை
@@ -348,8 +349,9 @@ const ThoniKaraoke = () => {
               disabled={isLoading}
               onPress={() => setShowMessage(!showMessage)}
             >
+              
               <MaterialCommunityIcons
-                name="android-messages"
+                name="message-text"
                 size={24}
                 color={isLoading ? "#999" : "black"}
               />

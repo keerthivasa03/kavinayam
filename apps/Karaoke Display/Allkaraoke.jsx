@@ -249,7 +249,30 @@ const Allkaraoke = () => {
         thumbTintColor="#FF0000"
         onSlidingComplete={handleSeek}
       />
+{showMessage && (
+        <View style={tw`absolute inset-0 z-50 justify-center items-center`}>
+          {/* Semi-transparent overlay */}
+          <View style={tw`absolute inset-0 bg-black opacity-70`} />
 
+          {/* Message box */}
+          <View
+            style={tw`bg-black bg-opacity-80 rounded-2xl w-4/5 p-6 border border-gray-600`}
+          >
+            <Text style={tw`text-white text-center text-lg font-bold mb-4`}>
+              விளக்கம்
+            </Text>
+            <Text style={tw`text-white text-center text-lg`}>
+              நயம், தொனி, உச்சரிப்பு, வேகம் ஆகியவை நல்ல பேச்சின் முக்கிய அம்சங்களாகும். நயம் என்பது சொற்களை இனிமையாகவும் மென்மையாகவும் பேசுதல்; தொனி என்பது உணர்ச்சிக்கு ஏற்ப குரல் உயர்வு-தாழ்வை சரியாக மாற்றுதல்; உச்சரிப்பு என்பது ஒவ்வொரு சொல்லையும் தெளிவாகச் சொல்லுதல்; வேகம் என்பது மிக வேகமாகவோ மிக மெதுவாகவோ அல்லாமல் மிதமான அளவில் பேசுதல் ஆகும். இந்த நான்கு அம்சங்களையும் சரியாகப் பயன்படுத்தினால் பேச்சு தெளிவாகவும் கேட்பவரை ஈர்க்கும் விதமாகவும் இருக்கும்.
+            </Text>
+            <TouchableOpacity
+              onPress={() => setShowMessage(false)}
+              style={tw`mt-6 bg-white py-2 rounded-full`}
+            >
+              <Text style={tw`text-black text-center font-semibold`}>OK</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      )}
       {/* 🎮 CONTROLS */}
       <View style={tw`flex-row justify-center mt-4`}>
         <TouchableOpacity

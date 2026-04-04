@@ -4,10 +4,10 @@ import {
   Text,
   TouchableOpacity,
   FlatList,
-  SafeAreaView,
   Dimensions,
   ActivityIndicator,
 } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 import { Entypo, Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
 import { Audio } from "expo-av";
 import tw from "tailwind-react-native-classnames";
@@ -239,7 +239,7 @@ const PronunciationKaroki = () => {
             style={tw`bg-black bg-opacity-80 rounded-2xl w-4/5 p-6 border border-gray-600`}
           >
             <Text style={tw`text-white text-center text-lg font-bold mb-4`}>
-              விளக்கம
+              விளக்கம்
             </Text>
             <Text style={tw`text-white text-center text-lg`}>
               கவிதையில் வேகம் (Rhythm or Pace) என்பது ஒரு கவிதையின் வரிகள்,
@@ -338,7 +338,7 @@ const PronunciationKaroki = () => {
               onPress={() => setShowMessage(!showMessage)}
             >
               <MaterialCommunityIcons
-                name="android-messages"
+                name="message-text"
                 size={24}
                 color={isLoading ? "#999" : "black"}
               />

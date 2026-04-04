@@ -6,7 +6,7 @@
     "orientation": "portrait",
     "icon": "./assets/logo.png",
     "userInterfaceStyle": "light",
-    "newArchEnabled": false,
+    "newArchEnabled": true,
     "scheme": "kavinayam",
     "splash": {
       "image": "./assets/logo.png",
@@ -30,7 +30,12 @@
         "android.permission.READ_EXTERNAL_STORAGE",
         "android.permission.WRITE_EXTERNAL_STORAGE",
         "android.permission.RECORD_AUDIO",
-        "android.permission.ACCESS_MEDIA_LOCATION"
+        "android.permission.ACCESS_MEDIA_LOCATION",
+        "android.permission.READ_MEDIA_VISUAL_USER_SELECTED",
+        "android.permission.READ_MEDIA_IMAGES",
+        "android.permission.READ_MEDIA_VIDEO",
+        "android.permission.READ_MEDIA_AUDIO",
+        "android.permission.MODIFY_AUDIO_SETTINGS"
       ],
       "package": "com.yourcompany.kavinayamtamil"
     },
@@ -59,12 +64,14 @@
           "microphonePermission": "Allow $(PRODUCT_NAME) to access your microphone",
           "cameraPermission": "Allow $(PRODUCT_NAME) to access your camera"
         }
-      ]
+      ],
+      "expo-audio"
     ],
     "extra": {
       "eas": {
         "projectId": "61c15b9f-d98b-4e42-ac76-ac8df761edf4"
       }
-    }
+    },
+    "owner": "keerhivasa03"
   }
 }
