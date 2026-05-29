@@ -16,7 +16,7 @@ import { supabase } from "../../lib/supabase";
 import PropTypes from "prop-types";
 import { decode as atob } from "base-64";
 
-const RecordingComponent = ({ lyrics = [], flatListRef, onClose, name }) => {
+const RecordingComponent = ({ lyrics = [], flatListRef, setShowRecordingUI,onClose, name }) => {
   const [recording, setRecording] = useState(null);
   const [isRecording, setIsRecording] = useState(false);
   const [recordingsList, setRecordingsList] = useState([]);
@@ -57,6 +57,10 @@ const RecordingComponent = ({ lyrics = [], flatListRef, onClose, name }) => {
 
   // 🎤 RECORD
   const startRecording = async () => {
+    if (recordingsList.length >= 10) {
+    alert("You can only save up to 10 recordings.");
+    return;
+  }
     const { status } = await Audio.requestPermissionsAsync();
     if (status !== "granted") return;
 
@@ -137,7 +141,8 @@ const RecordingComponent = ({ lyrics = [], flatListRef, onClose, name }) => {
       c.charCodeAt(0)
     );
 
-    const fileName = `${Date.now()}.m4a`;
+    const randomNum = Math.floor(1000 + Math.random() * 9000);
+    const fileName = `${name}${randomNum}.m4a`;
     const filePath = `${user.id}/${fileName}`;
 
     await supabase.storage
@@ -194,6 +199,19 @@ const RecordingComponent = ({ lyrics = [], flatListRef, onClose, name }) => {
       <Text style={tw`text-white text-center mb-3`}>
         {isRecording ? "Recording..." : "Ready"}
       </Text>
+      <TouchableOpacity
+              onPress={() => setShowRecordingUI(false)}
+              style={{
+                position: "absolute",
+                top: 10,
+                right: 10,
+                backgroundColor: "red",
+                padding: 10,
+                borderRadius: 20,
+              }}
+            >
+              <Text style={{ color: "white" }}>X</Text>
+            </TouchableOpacity>
 
       {/* 🎤 RECORD BUTTON */}
       <TouchableOpacity

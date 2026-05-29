@@ -209,7 +209,25 @@ const RecordingsList = () => {
       ) : (
         <Animated.View style={{ opacity: fadeAnim, flex: 1 }}>
           <Text style={styles.header}>🎧 Your Recordings</Text>
+<View
+  style={tw.style(
+    "mx-4 mt-3 mb-2 p-3 rounded-xl",
+    { backgroundColor: "#FFF3CD", borderWidth: 1, borderColor: "#FFC107" }
+  )}
+>
+  <Text style={tw`text-center font-bold text-yellow-800`}>
+    ⚠️ பதிவு குறிப்பு
+  </Text>
 
+  <Text style={tw`text-center text-yellow-900 mt-2`}>
+    ஒவ்வொரு பயனரும் அதிகபட்சமாக 10 ஒலிப்பதிவுகள் மட்டுமே
+    சேமிக்க அனுமதிக்கப்படுவர்.
+  </Text>
+
+  <Text style={tw`text-center text-yellow-900 mt-1`}>
+    புதிய பதிவு செய்ய வேண்டுமெனில் பழைய பதிவுகளில் ஒன்றை நீக்கவும்.
+  </Text>
+</View>
           <FlatList
             data={audioFiles}
             keyExtractor={(item) => item.name}

@@ -261,6 +261,7 @@ const ThoniKaraoke = () => {
           lyrics={lyrics}
           flatListRef={flatListRef}
           onClose={() => setShowRecordingUI(false)}
+          setShowRecordingUI={setShowRecordingUI}
           name={name}
         />
       ) : (
@@ -341,7 +342,7 @@ const ThoniKaraoke = () => {
 
   {/* MIC */}
   <TouchableOpacity
-    onPress={() => setShowRecordingUI(true)}
+     onPress={handleStartRecording}
     style={tw`bg-white p-3 rounded-full ml-6`}
   >
     <Image

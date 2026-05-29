@@ -327,12 +327,18 @@ const UhchayaripuKaraoke = () => {
         </View>
       )}
       {showRecordingUI ? (
+        <>
         <RecordingComponent
           lyrics={lyrics}
           flatListRef={flatListRef}
           onClose={() => setShowRecordingUI(false)}
+          setShowRecordingUI={setShowRecordingUI}
           name={name}
         />
+        
+        
+        </>
+        
       ) : (
         <>
           <View style={tw`border border-black mb-2`}>
@@ -429,7 +435,7 @@ const UhchayaripuKaraoke = () => {
 
   {/* MIC */}
   <TouchableOpacity
-    onPress={() => setShowRecordingUI(true)}
+    onPress={handleStartRecording}
     style={tw`bg-white p-3 rounded-full ml-6`}
   >
     <Image
