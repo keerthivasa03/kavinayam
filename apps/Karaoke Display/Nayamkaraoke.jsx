@@ -40,6 +40,41 @@ const Nayamkaraoke = () => {
 
   const lyrics = item?.lyrics || [];
 
+const handleStartRecording = async () => {
+  try {
+    if (videoRef.current) {
+      const status = await videoRef.current.getStatusAsync();
+
+      if (status.isPlaying) {
+        await videoRef.current.pauseAsync();
+      }
+    }
+
+    clearInterval(intervalRef.current);
+    setIsPlaying(false);
+    setShowRecordingUI(true);
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+const handleBackPress = async () => {
+  try {
+    if (videoRef.current) {
+      await videoRef.current.stopAsync();
+    }
+  } catch (e) {}
+
+  clearInterval(intervalRef.current);
+  navigation.goBack();
+};
+
+useEffect(() => {
+  return () => {
+    clearInterval(intervalRef.current);
+  };
+}, []);
+
   // 🛑 SAFETY CHECK
   useEffect(() => {
     console.log("ITEM:", item);
@@ -133,13 +168,14 @@ const Nayamkaraoke = () => {
     );
   };
 
+ 
   return (
     <SafeAreaView
       style={tw.style("flex-1 px-4 pt-2", { backgroundColor: "#D5C7A3" })}
     >
       {/* 🔙 BACK */}
-      <TouchableOpacity onPress={() => navigation.goBack()}>
-        <AntDesign name="left" size={24} color="black" />
+      <TouchableOpacity onPress={handleBackPress}>
+          <AntDesign name="left" size={24} color="black" />
       </TouchableOpacity>
 
       {/* 🎵 TITLE */}
@@ -150,36 +186,32 @@ const Nayamkaraoke = () => {
       </View>
 
       {/* 🎬 VIDEO SAFE RENDER */}
-      {!showRecordingUI && item?.videoPath ? (
-        <View
-          style={[
-            tw`rounded-xl overflow-hidden mb-4`,
-            { height: height * 0.3 },
-          ]}
-        >
-          <Video
-            ref={videoRef}
-            style={tw`w-full h-full`}
-            source={item.videoPath} // ✅ SAFE
-            resizeMode={ResizeMode.COVER}
-            isLooping
-            useNativeControls={false}
-            onPlaybackStatusUpdate={(status) => {
-              if (status.isLoaded) {
-                setCurrentTime(status.positionMillis / 1000);
-                if (status.durationMillis) {
-                  setDuration(status.durationMillis / 1000);
-                }
-              }
-            }}
-          />
-        </View>
-      ) : (
-        <Text style={tw`text-center text-red-500`}>
-          ⚠️ Video not found
-        </Text>
-      )}
+      {!showRecordingUI && item?.videoPath && (
+  <View
+    style={[
+      tw`rounded-xl overflow-hidden mb-4`,
+      { height: height * 0.3 },
+    ]}
+  >
+    <Video
+      ref={videoRef}
+      style={tw`w-full h-full`}
+      source={item.videoPath}
+      resizeMode={ResizeMode.COVER}
+      isLooping
+      useNativeControls={false}
+      onPlaybackStatusUpdate={(status) => {
+        if (status.isLoaded) {
+          setCurrentTime(status.positionMillis / 1000);
 
+          if (status.durationMillis) {
+            setDuration(status.durationMillis / 1000);
+          }
+        }
+      }}
+    />
+  </View>
+)}
       {/* 🎤 LYRICS */}
       <View
         style={[
@@ -252,7 +284,7 @@ const Nayamkaraoke = () => {
 
   {/* MIC */}
   <TouchableOpacity
-    onPress={() => setShowRecordingUI(true)}
+    onPress={handleStartRecording}
     style={tw`bg-white p-3 rounded-full ml-6`}
   >
     <Image
@@ -275,6 +307,43 @@ const Nayamkaraoke = () => {
   </TouchableOpacity>
 
 </View>
+{showRecordingUI && (
+  <View
+    style={{
+      position: "absolute",
+      bottom: 0,
+      left: 0,
+      right: 0,
+      height: "52%",
+      backgroundColor: "#D5C7A3",
+      borderTopLeftRadius: 20,
+      borderTopRightRadius: 20,
+      zIndex: 1000,
+    }}
+  >
+    <RecordingComponent
+      lyrics={lyrics}
+      flatListRef={flatListRef}
+      onClose={() => setShowRecordingUI(false)}
+      name={item?.title}
+    />
+
+    <TouchableOpacity
+      onPress={() => setShowRecordingUI(false)}
+      style={{
+        position: "absolute",
+        top: 10,
+        right: 10,
+        backgroundColor: "red",
+        padding: 10,
+        borderRadius: 20,
+      }}
+    >
+      <Text style={{ color: "white" }}>X</Text>
+    </TouchableOpacity>
+  </View>
+)}
+
     </SafeAreaView>
   );
 };

@@ -1,6 +1,7 @@
 import React from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { Image } from "react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import HomeScreen from "../Home/HomeScreen";
 import KavithaiList from "../Kavithai List/KavithaiList";
@@ -10,6 +11,7 @@ import Logout from "../Logout/Logout";
 const Tab = createBottomTabNavigator();
 
 const BottomTabNavigator = () => {
+  const insets = useSafeAreaInsets();
   return (
     <Tab.Navigator
       screenOptions={({ route }) => ({
@@ -19,8 +21,8 @@ const BottomTabNavigator = () => {
         tabBarStyle: {
           backgroundColor: "#000",
           borderTopWidth: 0,
-          height: 60,
-          paddingBottom: 5,
+          height: 60 + insets.bottom,
+          paddingBottom: insets.bottom,
         },
         tabBarLabelStyle: {
           fontSize: 12,

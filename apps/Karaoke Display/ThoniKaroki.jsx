@@ -16,7 +16,7 @@ import {
   Entypo,
   MaterialCommunityIcons,
 } from "@expo/vector-icons";
-import { Audio } from "expo-audio";
+import { Audio } from "expo-av";
 import tw from "tailwind-react-native-classnames";
 import Slider from "@react-native-community/slider";
 import { useNavigation, useRoute } from "@react-navigation/native";
