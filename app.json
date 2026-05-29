@@ -10,7 +10,6 @@
     "assetBundlePatterns": [
       "**/*"
     ],
-    
     "ios": {
       "supportsTablet": true,
       "infoPlist": {
@@ -62,12 +61,7 @@
           "microphonePermission": "Allow $(PRODUCT_NAME) to access your microphone",
           "cameraPermission": "Allow $(PRODUCT_NAME) to access your camera"
         }
-      ],
-      "expo-audio",
-      "expo-font",
-      "expo-sharing",
-      "expo-status-bar",
-      "expo-asset"
+      ]
     ],
     "extra": {
       "eas": {
