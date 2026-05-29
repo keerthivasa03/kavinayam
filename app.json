@@ -6,14 +6,11 @@
     "orientation": "portrait",
     "icon": "./assets/logo.png",
     "userInterfaceStyle": "light",
-    "newArchEnabled": true,
     "scheme": "kavinayam",
-     "assetBundlePatterns": ["**/*"],
-    "splash": {
-      "image": "./assets/logo.png",
-      "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
-    },
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    
     "ios": {
       "supportsTablet": true,
       "infoPlist": {
@@ -67,7 +64,10 @@
         }
       ],
       "expo-audio",
-      "expo-font"
+      "expo-font",
+      "expo-sharing",
+      "expo-status-bar",
+      "expo-asset"
     ],
     "extra": {
       "eas": {

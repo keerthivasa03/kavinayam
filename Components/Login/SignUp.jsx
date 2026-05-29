@@ -1,3 +1,4 @@
+import React, { useState } from "react";
 import {
   View,
   Text,
@@ -6,16 +7,24 @@ import {
   Alert,
   ActivityIndicator,
 } from "react-native";
-import React, { useState } from "react";
-import { supabase } from "../../lib/supabase";
+
 import tw from "tailwind-react-native-classnames";
 import { MaterialIcons } from "@expo/vector-icons";
+import { supabase } from "../../lib/supabase";
 
-const SignUp = ({ setScreen, email, setEmail, password, setPassword }) => {
+const SignUp = ({
+  setScreen,
+  email,
+  setEmail,
+  password,
+  setPassword,
+}) => {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [loading, setLoading] = useState(false);
+
   const [showPassword, setShowPassword] = useState(false);
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] =
+    useState(false);
 
   const handleSignUp = async () => {
     if (!email || !password || !confirmPassword) {
@@ -24,25 +33,49 @@ const SignUp = ({ setScreen, email, setEmail, password, setPassword }) => {
     }
 
     if (password !== confirmPassword) {
-      Alert.alert("Error", "Passwords don't match");
+      Alert.alert("Error", "Passwords do not match");
       return;
     }
 
     if (password.length < 6) {
-      Alert.alert("Error", "Password must be at least 6 characters");
+      Alert.alert(
+        "Error",
+        "Password must be at least 6 characters"
+      );
       return;
     }
 
     setLoading(true);
+
     try {
-      const { error } = await supabase.auth.signUp({
-        email,
-        password,
+      const { data, error } = await supabase.auth.signUp({
+        email: email.trim(),
+        password: password.trim(),
       });
 
-      if (error) throw error;
+      if (error) {
+        throw error;
+      }
+
+      console.log("User:", data);
+
+      Alert.alert(
+        "Success",
+        "Account created successfully. Check your email for verification."
+      );
+
+      setEmail("");
+      setPassword("");
+      setConfirmPassword("");
+
+      setScreen(2);
     } catch (error) {
-      Alert.alert("Error", error.message);
+      console.log(error);
+
+      Alert.alert(
+        "Signup Error",
+        error.message || "Something went wrong"
+      );
     } finally {
       setLoading(false);
     }
@@ -50,81 +83,123 @@ const SignUp = ({ setScreen, email, setEmail, password, setPassword }) => {
 
   return (
     <View
-      style={tw.style("flex-1 justify-center p-4", {
-        backgroundColor: "#D5C7A3",
-      })}
+      style={tw.style(
+        "flex-1 justify-center px-5",
+        {
+          backgroundColor: "#D5C7A3",
+        }
+      )}
     >
-      <Text style={tw`text-black text-center text-2xl font-bold mb-6`}>
+      <Text
+        style={tw`text-3xl font-bold text-center text-black mb-8`}
+      >
         Create Account
       </Text>
 
+      {/* EMAIL */}
       <TextInput
-        value={email}
-        onChangeText={setEmail}
         placeholder="Email"
         placeholderTextColor="#9CA3AF"
+        value={email}
+        onChangeText={setEmail}
         autoCapitalize="none"
         keyboardType="email-address"
-        style={tw`bg-gray-800 text-white p-4 rounded-lg mb-4`}
+        style={tw`bg-gray-800 text-white p-4 rounded-xl mb-4`}
       />
 
+      {/* PASSWORD */}
       <View style={tw`relative mb-4`}>
         <TextInput
-          value={password}
-          onChangeText={setPassword}
           placeholder="Password"
           placeholderTextColor="#9CA3AF"
+          value={password}
+          onChangeText={setPassword}
           secureTextEntry={!showPassword}
-          style={tw`bg-gray-800 text-white p-4 rounded-lg pr-10`}
+          style={tw`bg-gray-800 text-white p-4 rounded-xl pr-12`}
         />
+
         <TouchableOpacity
-          style={tw`absolute right-3 top-4`}
-          onPress={() => setShowPassword(!showPassword)}
+          style={tw`absolute right-4 top-4`}
+          onPress={() =>
+            setShowPassword(!showPassword)
+          }
         >
           <MaterialIcons
-            name={showPassword ? "visibility-off" : "visibility"}
+            name={
+              showPassword
+                ? "visibility-off"
+                : "visibility"
+            }
             size={24}
             color="#9CA3AF"
           />
         </TouchableOpacity>
       </View>
 
+      {/* CONFIRM PASSWORD */}
       <View style={tw`relative mb-6`}>
         <TextInput
-          value={confirmPassword}
-          onChangeText={setConfirmPassword}
           placeholder="Confirm Password"
           placeholderTextColor="#9CA3AF"
+          value={confirmPassword}
+          onChangeText={setConfirmPassword}
           secureTextEntry={!showConfirmPassword}
-          style={tw`bg-gray-800 text-white p-4 rounded-lg pr-10`}
+          style={tw`bg-gray-800 text-white p-4 rounded-xl pr-12`}
         />
+
         <TouchableOpacity
-          style={tw`absolute right-3 top-4`}
-          onPress={() => setShowConfirmPassword(!showConfirmPassword)}
+          style={tw`absolute right-4 top-4`}
+          onPress={() =>
+            setShowConfirmPassword(
+              !showConfirmPassword
+            )
+          }
         >
           <MaterialIcons
-            name={showConfirmPassword ? "visibility-off" : "visibility"}
+            name={
+              showConfirmPassword
+                ? "visibility-off"
+                : "visibility"
+            }
             size={24}
             color="#9CA3AF"
           />
         </TouchableOpacity>
       </View>
 
+      {/* SIGNUP BUTTON */}
       <TouchableOpacity
         onPress={handleSignUp}
         disabled={loading}
-        style={tw`bg-blue-500 p-4 rounded-lg mb-4`}
+        style={tw.style(
+          "p-4 rounded-xl mb-5",
+          {
+            backgroundColor: "#2563EB",
+          }
+        )}
       >
         {loading ? (
           <ActivityIndicator color="white" />
         ) : (
-          <Text style={tw`text-white text-center font-bold`}>Sign Up</Text>
+          <Text
+            style={tw`text-white text-center font-bold text-lg`}
+          >
+            Sign Up
+          </Text>
         )}
       </TouchableOpacity>
 
-      <TouchableOpacity onPress={() => setScreen(2)}>
-        <Text style={tw`text-gray-500 text-center`}>
-          Already have an account? <Text style={tw`text-red-600`}>Sign In</Text>
+      {/* LOGIN */}
+      <TouchableOpacity
+        onPress={() => setScreen(2)}
+      >
+        <Text
+          style={tw`text-center text-gray-700`}
+        >
+          Already have an account?{" "}
+          <Text style={tw`text-red-600 font-bold`}>
+            Sign In
+          </Text>
         </Text>
       </TouchableOpacity>
     </View>

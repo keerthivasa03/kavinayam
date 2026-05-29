@@ -1,24 +1,21 @@
 {
   "cli": {
-    "version": ">= 16.3.3",
-    "appVersionSource": "local"
+    "version": ">= 19.1.0",
+    "appVersionSource": "remote"
   },
   "build": {
     "development": {
       "developmentClient": true,
-      "distribution": "internal",
-      "android": {
-        "gradleCommand": ":app:assembleDebug"
-      }
+      "distribution": "internal"
     },
     "preview": {
-      "distribution": "internal",
-      "android": {
-        "buildType": "apk",
-        "gradleCommand": ":app:assembleRelease"
-      }
+      "distribution": "internal"
     },
-    "production": {}
+    "production": {
+      "autoIncrement": true
+    }
   },
-  "submit": {}
+  "submit": {
+    "production": {}
+  }
 }
